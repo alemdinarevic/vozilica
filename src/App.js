@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+
+//ROUTER
+import { Router, Route } from "react-router-dom";
+import { routes } from "./utils/routes";
+import router from "./utils/router";
+
+//STYLING
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
+  const routeComponents = routes.map(({ path, component }, key) => (
+    <Route
+      key={key}
+      exact
+      path={path}
+      component={component}
+    />
+  ));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router history={router}>{routeComponents}</Router>
+    </>
   );
 }
 

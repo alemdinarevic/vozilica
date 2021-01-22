@@ -2,38 +2,37 @@ import React, { useState } from "react";
 
 import "./Login.css";
 
+import * as authActions from '../../store/actions/auth';
 import Router from "../../utils/router";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const dispatch = useDispatch();
+
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    console.log({email, password});
+    authHandler();
   }
-  // const authHandler = () => {
-  //   let action = authActions.login(email, password);
-  //   setError(null);
-  //   setIsLoading(true);
 
-  //   dispatch(action)
-  //     .then((response) => {
-  //       setIsLoading(false);
-  //       showMessage({
-  //         message: "Successfully logged in",
-  //         type: "success",
-  //       });
-  //       console.log('in then')
-  //       props.navigation.navigate("Home");
-  //     })
-  //     .catch((error) => {
-	// 			console.log(error)
-  //       console.log("IN CATCH OF DISPATCH auth actions");
-  //       setError(error.message);
-  //       setIsLoading(false);
-  //     });
-  // };
+  const authHandler = () => {
+    let action = authActions.login(email, password);
+    setError(null);
+
+    dispatch(action)
+      .then((response) => {
+        console.log(response, 'response in then');
+        Router.push('/');
+      })
+      .catch((error) => {
+        console.log("IN CATCH OF DISPATCH auth actions");
+        setError(error.message);
+      });
+  };
+
   return (
     <div className="login-container">
       <form className="form-container" onSubmit={submitFormHandler}>

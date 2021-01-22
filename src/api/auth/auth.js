@@ -12,6 +12,6 @@ export default () => ({
     getApiClient().post(`/login`, { 
       email: email, 
       password: password,
-      authentication: 'session'
+      authentication: 'token'
      }),
 });

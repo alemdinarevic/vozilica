@@ -1,49 +1,41 @@
 import React, { useState } from "react";
 
 import "./Register.css";
-import Router from "../../utils/router";
 
+import Router from "../../utils/router";
 import authApi from '../../api/auth/auth';
+import * as authActions from '../../store/actions/auth';
+import { useDispatch } from "react-redux";
+
 
 const Register = (props) => {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const dispatch = useDispatch();
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    console.log({name, surname, email, password});
-    let userData = authenticate(name, surname, email, password);
-    console.log(userData);
+    authHandler();
   }
 
-  const authenticate = async (name, surname, email, password) => {
-    let data = await authApi().register(name, surname, email, password);
-    return data;
-  }
 
-  // const authHandler = () => {
-  //   let action = authActions.signUp(email, password);
-  //   setError(null);
-  //   setIsLoading(true);
+  const authHandler = () => {
+    let action = authActions.signUp(name, surname, email, password);
+    setError(null);
 
-  //   dispatch(action)
-  //     .then((response) => {
-  //       setIsLoading(false);
-  //       showMessage({
-  //         message: "Successfully logged in",
-  //         type: "success",
-  //       });
-  //       console.log('in then')
-  //       props.navigation.navigate("Home");
-  //     })
-  //     .catch((error) => {
-  //       console.log("IN CATCH OF DISPATCH auth actions");
-  //       setError(error.message);
-  //       setIsLoading(false);
-  //     });
-  // };
+    dispatch(action)
+      .then((response) => {
+        console.log(response, 'response in then');
+        Router.push('/');
+      })
+      .catch((error) => {
+        console.log("IN CATCH OF DISPATCH auth actions");
+        setError(error.message);
+      });
+  };
 
   return (
     <div className="register-container">
@@ -100,7 +92,7 @@ const Register = (props) => {
         <p className="forgot-password text-right">
           Already registered?{" "}
           <button
-            class="route-button"
+            className="route-button"
             onClick={(e) => {
               e.preventDefault();
               Router.push("/login");
